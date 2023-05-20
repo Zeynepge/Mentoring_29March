@@ -21,7 +21,7 @@ public class BaseDriver {
     @BeforeClass
     public void beforeClass(){
 
-        KalanOncekileriKapat();
+        ClosePrevious();
 
         Locale.setDefault(new Locale("EN"));
         System.setProperty("user.language", "EN");
@@ -55,7 +55,7 @@ public class BaseDriver {
         }
     }
 
-    public static void KalanOncekileriKapat(){
+    public static void ClosePrevious(){
         try {
             Runtime.getRuntime().exec("taskkill /F /IM chromedriver.exe /T");
         } catch (Exception ignored){
