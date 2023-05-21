@@ -9,7 +9,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 
 import java.time.Duration;
-import java.util.Locale;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,25 +30,32 @@ public class BaseDriver {
         logger.setLevel(Level.SEVERE);
         System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
 
+
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--remote-allow-origins=*");
+             options.addArguments("--remote-allow-origins=*");
+
         driver = new ChromeDriver(options);
-        //driver=new ChromeDriver();
         driver.manage().window(). maximize();
 
         Duration dr=Duration.ofSeconds(10);
-       driver.manage().timeouts().pageLoadTimeout(dr);
+        driver.manage().timeouts().pageLoadTimeout(dr);
 
         driver.manage().timeouts().implicitlyWait(dr);
 
-        wait=new WebDriverWait(driver, Duration.ofSeconds(30));
+        wait=new WebDriverWait(driver, Duration.ofSeconds(50));
 
+
+          //   options.setExperimentalOption("excludeSwitches", Arrays.asList("disable-popup-blocking"));
+            // options.addArguments("start-maximized");
+           //  options.addArguments("test-type");
+            // options.addArguments("disable-notifications");
+           //  options.AddUserProfilePreference("autofill.profile_enabled", false);
     }
     @AfterClass
     public void afterClass(){
         try {
             Thread.sleep(3000);
-            driver.quit();
+           // driver.quit();
         }catch (InterruptedException e)
         {
             throw new RuntimeException(e);

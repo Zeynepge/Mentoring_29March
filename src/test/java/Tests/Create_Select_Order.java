@@ -7,16 +7,24 @@ import Utlity.BaseDriver;
 import com.github.javafaker.Faker;
 import io.cucumber.java.bs.A;
 import io.cucumber.java.eo.Do;
+import io.cucumber.java.it.Ma;
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.text.DecimalFormat;
 import java.util.List;
 
 //29 March
 public class Create_Select_Order extends BaseDriver{
+    Faker faker1=new Faker();
+    public static double tt;
 
 
     @Test(priority = 1)
@@ -24,10 +32,8 @@ public class Create_Select_Order extends BaseDriver{
 
         driver.get("https://cleverppc.com/prestashop4/");
 
-        Faker faker1=new Faker();
-
-        DialogContent dc=new DialogContent();
         HeaderMenu hm=new HeaderMenu();
+        DialogContent dc=new DialogContent();
 
         hm.getSignInButton().click();
 
@@ -116,6 +122,9 @@ public class Create_Select_Order extends BaseDriver{
 
         double totalProducts_=Double.parseDouble(totalProducts);
 
+        DecimalFormat df=new DecimalFormat("#.##");
+        total=Double.valueOf(df.format(total));
+
         Assert.assertEquals(total,totalProducts_);
 
         String total_ship=(dc.getTotalShipping().getText()).substring(1);
@@ -124,30 +133,93 @@ public class Create_Select_Order extends BaseDriver{
         double totalShipping=Double.parseDouble(total_ship);
         double total_tax_included=Double.parseDouble(tax_included);
 
+        tt=totalProducts_+totalShipping;
+
+        tt=Double.valueOf(df.format(tt));
+
         // TOTAL TAX INCLUDED
-        Assert.assertEquals(total_tax_included,(totalProducts_+totalShipping));
+        Assert.assertEquals(total_tax_included,tt);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        dc.getProceedToCheckout().click();
 
     }
+
+    @Test(dependsOnMethods = "Select_Randomly")
+    void ProceedToCheckout() throws InterruptedException, AWTException {
+
+        DialogContent dc=new DialogContent();
+        HeaderMenu hm=new HeaderMenu();
+
+        dc.getAddress1().sendKeys(faker1.address().fullAddress());
+        dc.getCity().sendKeys(faker1.address().city());
+
+        Select stateMenu=new Select(dc.getSelectState());
+        int a=(int) (Math.random()*(stateMenu.getOptions().size()-1)+1);
+        stateMenu.selectByIndex(a);
+
+        dc.getZipCode().sendKeys("12345");
+        dc.getPhoneMobile().sendKeys(faker1.phoneNumber().cellPhone());
+
+        dc.getSubmitAddress().click();
+
+        // popup close
+        Robot rbt =new Robot();
+        for (int i = 0; i < 59; i++) {
+            rbt.keyPress(KeyEvent.VK_TAB);
+            rbt.keyRelease(KeyEvent.VK_TAB);
+            Thread.sleep(5);
+        }
+        rbt.keyPress(KeyEvent.VK_ENTER);
+        rbt.keyRelease(KeyEvent.VK_ENTER);
+
+        int aa=0;
+        for (int i = 2; i < 7; i++) {
+
+            if(dc.getDeliveryAddress().get(i).getText().equalsIgnoreCase(dc.getBillingAddress().get(i).getText()))
+             aa++;
+            if (aa==5)
+                break;
+        }
+        Assert.assertEquals(aa,5);
+
+        // Select delivery address
+        Select addressMenu=new Select(dc.getSelectDeliveryAddress());
+        //int c=(int)(Math.random()*(addressMenu.getOptions().size()-1)+1);
+        addressMenu.selectByIndex(0);
+
+        String adres=addressMenu.getOptions().get(0).getText();
+
+        dc.getProceedToCheckout2().click();
+
+        Assert.assertTrue(dc.getAddressName().getText().contains(adres));
+
+        dc.getiAgree().click();
+        dc.getProceedToCheckout3().click();
+
+        //CHOOSE PAYMENT METHOD
+
+        String ttPrice=dc.getTotalPricePayment().getText().substring(1);
+        Assert.assertEquals(tt,Double.parseDouble(ttPrice));
+
+        int c=(int)(Math.random()*1);
+
+        if(c==0)
+            dc.getBankWire().click();
+        else
+            dc.getPayCheck().click();
+
+        String amount=dc.getAmount().getText().substring(1);
+        Assert.assertEquals(tt,Double.parseDouble(amount));
+
+        dc.getConfirm().click();
+        Assert.assertTrue(dc.getSuccess().getText().contains("Your order on Xu Clothing is complete"));
+
+    }
+
+
+
+
+
 
 
 }
