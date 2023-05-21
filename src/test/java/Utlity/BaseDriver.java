@@ -43,7 +43,7 @@ public class BaseDriver {
 
         driver.manage().timeouts().implicitlyWait(dr);
 
-        wait=new WebDriverWait(driver, Duration.ofSeconds(50));
+        wait=new WebDriverWait(driver, Duration.ofSeconds(30));
 
 
           //   options.setExperimentalOption("excludeSwitches", Arrays.asList("disable-popup-blocking"));
