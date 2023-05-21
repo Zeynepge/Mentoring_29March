@@ -164,10 +164,10 @@ public class Create_Select_Order extends BaseDriver{
 
         // popup close
         Robot rbt =new Robot();
-        for (int i = 0; i < 59; i++) {
+        for (int i = 0; i < 63; i++) {
             rbt.keyPress(KeyEvent.VK_TAB);
             rbt.keyRelease(KeyEvent.VK_TAB);
-            Thread.sleep(5);
+            Thread.sleep(10);
         }
         rbt.keyPress(KeyEvent.VK_ENTER);
         rbt.keyRelease(KeyEvent.VK_ENTER);
@@ -215,11 +215,6 @@ public class Create_Select_Order extends BaseDriver{
         Assert.assertTrue(dc.getSuccess().getText().contains("Your order on Xu Clothing is complete"));
 
     }
-
-
-
-
-
 
 
 }

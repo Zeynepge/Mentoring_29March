@@ -145,27 +145,21 @@ public class DialogContent extends Parent {
     public WebElement getBankWire() {
         return bankWire;
     }
-
     public WebElement getPayCheck() {
         return payCheck;
     }
-
     public WebElement getTotalPricePayment() {
         return totalPricePayment;
     }
-
     public WebElement getProceedToCheckout3() {
         return proceedToCheckout3;
     }
-
     public WebElement getiAgree() {
         return iAgree;
     }
-
     public WebElement getAddressName() {
         return addressName;
     }
-
     public WebElement getSelectDeliveryAddress() {
         return selectDeliveryAddress;
     }
@@ -178,11 +172,9 @@ public class DialogContent extends Parent {
     public List<WebElement> getBillingAddress() {
         return billingAddress;
     }
-
     public WebElement getMessage() {
         return message;
     }
-
     public WebElement getSubmitAddress() {
         return submitAddress;
     }

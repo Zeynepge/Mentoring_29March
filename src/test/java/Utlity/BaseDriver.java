@@ -33,6 +33,7 @@ public class BaseDriver {
 
         ChromeOptions options = new ChromeOptions();
              options.addArguments("--remote-allow-origins=*");
+             options.setExperimentalOption("excludeSwitches",Arrays.asList("disable-popup-blocking"));
 
         driver = new ChromeDriver(options);
         driver.manage().window(). maximize();
@@ -55,7 +56,7 @@ public class BaseDriver {
     public void afterClass(){
         try {
             Thread.sleep(3000);
-           // driver.quit();
+            driver.quit();
         }catch (InterruptedException e)
         {
             throw new RuntimeException(e);
